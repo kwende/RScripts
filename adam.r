@@ -9,16 +9,18 @@ binom = function(probability,results,numberOfTrials){
 
 #test data. this is to test for a normal Bernoulli coin-toss
 #trial style data-set. 
-testData = c(1,1,0,0,1,1,0,1,1,1,1,0,1)
+testData = 0:11
 
 #for plotting
-xVec = 0:(length(testData)-1)
-yVec = dbinom(testData,prob=.5,size=length(testData),log=FALSE); 
+xVec = testData
+yVec = dbinom(testData,prob=0.5,size=length(testData),log=FALSE); 
+
+print(sum(dbinom(testData,prob=0.5,size=length(testData),log=TRUE)))
 
 plot(xVec,yVec,xlab="X",ylab="Prob")
 
-#r = mle2(minuslogl = binom, 
-#     start = list(probability=.75), 
-#     data = list(numberOfTrials=length(testData), results = testData))
+r = mle2(minuslogl = binom, 
+     start = list(probability=.6), 
+     data = list(numberOfTrials=length(testData), results = testData))
 
-#summary(r)
+print(r)
