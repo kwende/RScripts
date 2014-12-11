@@ -29,7 +29,7 @@ PM3 = function(x,a1,b1,x01,d2,b2,x02,c){
 }
 
 likelihood = function(values,data,a1,b1,x01,d2,b2,x02,c){
-
+  
   sum = 0
   for(i in 1:length(values)){
     
@@ -44,27 +44,43 @@ likelihood = function(values,data,a1,b1,x01,d2,b2,x02,c){
     }
     else{
       val = 10000000000
-      #print(c(a1,d2,b1,b2,x01,x02,c));
     }
     
     sum = sum + val
   }
-
+  
   return(sum)
 }
 
-csv = read.csv(file="thresholds.csv",head=TRUE,sep=",")
+csv = read.csv(file="thresholds2.csv",head=TRUE,sep=",")
 
-#v = csv[,1]
-#d = csv[,17]
-d = z
-v = x
+v = csv[,1]
+d = csv[,2]
+
+leftHandInflectionSlope = .3 #b1
+rightHandInfectionSlope = .3 #b2
+leftHandAsymptote = 0 #a1
+rightHandAsymptote = 0 #d2
+leftHandInflectionPoint = 10 #x01
+rightHandInflectionPoint = 50 #x02
+peak = 1
+
+leftHandInflectionMin = 1
+leftHandInflectionMax = 25
+rightHandInflectionMin = 26
+rightHandInflectionMax = 75
 
 r = mle2(minuslogl = likelihood, 
-        start = list(x01=20,x02=50, a1=.5, b1=1, d2=.5, b2=1, c=.5), 
+        start = list(x01=leftHandInflectionPoint,
+                     x02=rightHandInflectionPoint, 
+                     a1=leftHandAsymptote, 
+                     b1=leftHandInflectionSlope, 
+                     d2=rightHandAsymptote, 
+                     b2=rightHandInfectionSlope, 
+                     c=peak), 
         data = list(values=v,data=d),
-        lower = c(x01=-10,x02=26, a1=0, b1=0, d2=0, b2=0, c=0),
-        upper = c(x01=25, x02=75, a1=1, b1=1, d2=1, b2=1, c=1),
+        lower = c(x01=leftHandInflectionMin,x02=rightHandInflectionMin, a1=0, b1=0, d2=0, b2=0, c=0),
+        upper = c(x01=leftHandInflectionMax, x02=rightHandInflectionMax, a1=1, b1=1, d2=1, b2=1, c=1),
         method="L-BFGS-B")
 
 print(r)
@@ -81,11 +97,11 @@ for(i in 0:101){
   x02 = r@coef["x02"]
   c = r@coef["c"]  
   
-  #a1 = .3
+  #a1 = .1
   #b1 = .3
   #x01 = 20
-  #d2 = 0
-  #b2 = .1
+  #d2 = .3
+  #b2 = .3
   #x02 = 50
   #c = 1
   
