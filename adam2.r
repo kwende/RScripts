@@ -48,8 +48,11 @@ PM3Likelihood = function(values,data,a1,b1,x01,d2,b2,x02,c){
     if(prob>0 && prob<1){
       val = -log10(prob^isFound * (1-prob)^(1-isFound))
     }
-    else{
+    else if(prob <= 0){
       val = 10000000000
+    }
+    else if(prob >=1){
+      val = -10000000000
     }
     
     sum = sum + val
@@ -86,14 +89,14 @@ PM3MLE = function(v,d){
   rightHandInfectionSlope = .3 #b2
   leftHandAsymptote = 0 #a1
   rightHandAsymptote = 0 #d2
-  leftHandInflectionPoint = 5 #x01
-  rightHandInflectionPoint = 15 #x02
+  leftHandInflectionPoint = 50 #x01
+  rightHandInflectionPoint = 100 #x02
   peak = 1
   
   leftHandInflectionMin = 1
-  leftHandInflectionMax = 9
-  rightHandInflectionMin = 10
-  rightHandInflectionMax = 20
+  leftHandInflectionMax = 75
+  rightHandInflectionMin = 76
+  rightHandInflectionMax = 150
   
   r = mle2(minuslogl = PM3Likelihood, 
            start = list(x01=leftHandInflectionPoint,
@@ -137,15 +140,17 @@ csv = read.csv(file="thresholds.csv",head=TRUE,sep=",")
 
 v = csv[,9]
 d = csv[,12]
+#v = csv[,1]
+#d = csv[,2]
 
 r = PM3MLE(v,d);
 #r = PM2MLE(v,d);
 
 print(r)
 
-x = 0:100
-y = 0:100
-for(i in 0:101){
+x = 0:which.max(d)
+y = 0:which.max(d)
+for(i in 0:length(y)){
   
   a1 = r@coef["a1"]
   b1 = r@coef["b1"]
