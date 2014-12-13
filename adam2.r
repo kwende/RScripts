@@ -85,8 +85,8 @@ PM2Likelihood = function(values,data,a,d,b,x0){
 }
 
 PM3MLE = function(v,d){
-  leftHandInflectionSlope = .3 #b1
-  rightHandInfectionSlope = .3 #b2
+  leftHandInflectionSlope = .5 #b1
+  rightHandInfectionSlope = .5 #b2
   leftHandAsymptote = 0 #a1
   rightHandAsymptote = 0 #d2
   leftHandInflectionPoint = 50 #x01
