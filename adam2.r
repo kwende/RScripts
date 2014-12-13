@@ -135,8 +135,8 @@ PM2MLE = function(v,d){
 
 csv = read.csv(file="thresholds.csv",head=TRUE,sep=",")
 
-v = csv[,1]
-d = csv[,2]
+v = csv[,9]
+d = csv[,12]
 
 r = PM3MLE(v,d);
 #r = PM2MLE(v,d);
